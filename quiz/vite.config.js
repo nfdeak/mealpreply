@@ -5,7 +5,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/mealpreply-quiz/',
+  base: '/mealpreply/',
   server: { port: 3002, cors: true },
   build: {
     rollupOptions: {
