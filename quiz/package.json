@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp quiz-data.json dist/",
+    "build": "vite build && cp quiz-data.json dist/ && node scripts/write-spa-404.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

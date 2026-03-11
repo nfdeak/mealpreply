@@ -367,7 +367,7 @@ const QuizStructure = () => {
             </div>
             <div className="flex items-center gap-3">
               <a
-                href="/"
+                href={import.meta.env.BASE_URL}
                 className="text-sm text-indigo-600 hover:text-indigo-800 underline"
               >
                 View Quiz
