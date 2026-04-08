@@ -7,7 +7,7 @@ function ChecklistItem({ label, done }) {
     <div className={`flex items-center gap-3 transition-all duration-500 ${done ? 'opacity-100' : 'opacity-40'}`}>
       <span className={`w-6 h-6 rounded-md shrink-0 flex items-center justify-center transition-colors duration-500
         ${done ? 'bg-violett' : ''}`}>
-        {done && <span className="text-bright text-body font-semibold font-['Lacquer']">V</span>}
+        {done && <span className="text-bright text-body font-semibold font-['Lacquer']">X</span>}
       </span>
       <span className={`text-body transition-colors duration-500 ${done ? 'text-dark font-medium' : 'text-grey'}`}>
         {label}
