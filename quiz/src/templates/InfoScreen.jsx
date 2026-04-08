@@ -190,7 +190,7 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
   const ctaFooterBg = isDark
     ? 'bg-violett'
     : isImageBg
-      ? 'bg-gradient-to-t from-[#FBFBFB]/95 via-[#FBFBFB]/80 to-transparent'
+      ? ''
       : 'bg-gradient-to-t from-[#FBFBFB] via-[#FBFBFB] to-transparent'
 
   return (
