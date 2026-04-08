@@ -1,7 +1,7 @@
 import Button from '../components/atoms/Button'
 import { interpolate } from '../engine/computeVars'
 import { assetUrl } from '../utils/assetUrl'
-import { CalendarCheck, Coins, Clock, MoreHorizontal, Minus, Plus } from 'lucide-react'
+import { CalendarCheck, Coins, Clock, MoreHorizontal, Minus, Plus, Eye } from 'lucide-react'
 
 const statIconMap = {
   violett: CalendarCheck,
@@ -133,70 +133,70 @@ function ValueDemoVariant({ screen, ctx }) {
         </h1>
       </div>
 
-      {/* Highlight card — summary stats */}
+      {/* Highlight card — green, bolt style */}
       {screen.highlightCard && (
-        <div className="animate-in delay-2 flex items-center gap-3 bg-bright rounded-xl p-3 w-full">
-          <div className="w-[100px] h-[100px] shrink-0 rounded-[10px] bg-border/30 flex items-center justify-center overflow-hidden">
-            {screen.highlightCard.image ? (
-              <img src={assetUrl(screen.highlightCard.image)} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-micro text-grey">photo</span>
+        <div className="animate-in delay-2 flex items-center gap-3 bg-green rounded-2xl border-2 border-dark p-3 w-full">
+          <div className="w-[100px] h-[100px] shrink-0 flex items-center justify-center overflow-hidden">
+            {screen.highlightCard.image && (
+              <img src={assetUrl(screen.highlightCard.image)} alt="" className="w-full h-full object-contain" />
             )}
           </div>
           <div className="flex flex-col gap-1.5 flex-1">
             {screen.highlightCard.lines.map((line, i) => (
-              <p key={i} className="text-small text-dark">{interpolate(line, ctx)}</p>
+              <p key={i} className="text-body font-semibold text-dark leading-tight">{interpolate(line, ctx)}</p>
             ))}
           </div>
         </div>
       )}
 
-      {/* Recipe list — single white card, rows separated by dividers */}
-      <div className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3">
+      {/* Recipe list — single bolt-styled card, rows separated by thick dividers */}
+      <div className="bg-bright rounded-2xl border-2 border-dark w-full overflow-hidden animate-in delay-3">
         {recipes.map((recipe, i) => {
           const servings = ctx.totalPeople || 4
           return (
             <div
               key={i}
-              className={`flex items-center gap-3 p-3 ${i > 0 ? 'border-t border-border' : ''}`}
+              className={`flex items-center gap-3 p-3 ${i > 0 ? 'border-t-2 border-dark' : ''}`}
             >
               {recipe.image ? (
-                <img src={assetUrl(recipe.image)} alt="" className="w-20 h-20 shrink-0 rounded-xl object-cover" />
+                <img src={assetUrl(recipe.image)} alt="" className="w-20 h-20 shrink-0 rounded-xl border-2 border-dark object-cover" />
               ) : (
-                <div className="w-20 h-20 shrink-0 rounded-xl bg-border/50 flex items-center justify-center">
+                <div className="w-20 h-20 shrink-0 rounded-xl border-2 border-dark bg-border/30 flex items-center justify-center">
                   <span className="text-micro text-grey">photo</span>
                 </div>
               )}
               <div className="flex flex-col gap-2 flex-1 min-w-0">
-                <span className="text-body font-semibold text-dark leading-tight line-clamp-2">
+                <span className="text-body font-bold text-dark leading-tight line-clamp-2">
                   {interpolate(recipe.name, ctx)}
                 </span>
-                <div className="flex items-center gap-1.5 text-grey">
-                  <Clock size={14} strokeWidth={1.8} />
-                  <span className="text-small">{interpolate(recipe.time, ctx)}</span>
+                <div className="flex items-center gap-1.5 text-dark">
+                  <Clock size={14} strokeWidth={2.2} />
+                  <span className="text-small font-medium">{interpolate(recipe.time, ctx)}</span>
                 </div>
                 <div className="flex items-center justify-between mt-0.5">
-                  <div className="inline-flex items-center gap-2 bg-border/40 rounded-full pl-1 pr-1 py-0.5">
+                  <div className="inline-flex items-center gap-1 bg-bright rounded-full border-2 border-dark pl-1 pr-1 py-0.5">
                     <button type="button" className="w-6 h-6 rounded-full flex items-center justify-center text-dark" aria-label="decrease">
-                      <Minus size={14} strokeWidth={2} />
+                      <Minus size={14} strokeWidth={2.5} />
                     </button>
-                    <span className="text-small font-semibold text-dark tabular-nums w-4 text-center">{servings}</span>
+                    <span className="text-small font-bold text-dark tabular-nums w-4 text-center">{servings}</span>
                     <button type="button" className="w-6 h-6 rounded-full flex items-center justify-center text-dark" aria-label="increase">
-                      <Plus size={14} strokeWidth={2} />
+                      <Plus size={14} strokeWidth={2.5} />
                     </button>
                   </div>
-                  <button type="button" className="w-7 h-7 flex items-center justify-center text-grey" aria-label="more">
-                    <MoreHorizontal size={18} strokeWidth={2} />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button type="button" className="w-7 h-7 flex items-center justify-center text-dark" aria-label="view">
+                      <Eye size={18} strokeWidth={2} />
+                    </button>
+                    <button type="button" className="w-7 h-7 flex items-center justify-center text-dark" aria-label="more">
+                      <MoreHorizontal size={18} strokeWidth={2} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           )
         })}
       </div>
-
-      {/* Gradient fade at bottom — fixed position over recipe list */}
-      <div className="w-[calc(100%+40px)] -mx-5 h-64 -mt-64 relative z-10 bg-gradient-to-t from-violett via-violett/70 to-transparent pointer-events-none" />
     </>
   )
 }
@@ -244,6 +244,11 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
       </div>
 
       <div className="flex-1" />
+
+      {/* Fade to bottom for value_demo so recipe list dissolves into the CTA footer */}
+      {variant === 'value_demo' && (
+        <div className="fixed bottom-0 left-0 right-0 h-48 z-10 bg-gradient-to-t from-violett via-violett/85 to-transparent pointer-events-none" />
+      )}
 
       {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
       <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
