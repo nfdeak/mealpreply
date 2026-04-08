@@ -5,10 +5,10 @@ import { assetUrl } from '../utils/assetUrl'
 function ChecklistItem({ label, done }) {
   return (
     <div className={`flex items-center gap-3 transition-all duration-500 ${done ? 'opacity-100' : 'opacity-40'}`}>
-      <div className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center transition-all duration-500
-        ${done ? 'bg-green' : 'border-2 border-grey'}`}>
-        {done && <span className="text-bright text-small font-bold">✓</span>}
-      </div>
+      <span className={`w-6 h-6 rounded-md shrink-0 flex items-center justify-center transition-colors duration-500
+        ${done ? 'bg-violett' : 'border-2 border-dark'}`}>
+        {done && <span className="text-bright text-body font-semibold font-['Lacquer']">X</span>}
+      </span>
       <span className={`text-body transition-colors duration-500 ${done ? 'text-dark font-medium' : 'text-grey'}`}>
         {label}
       </span>
@@ -53,10 +53,15 @@ export default function AnalyzingScreen({ screen, ctx = {}, onNext, onBack }) {
       </div>
       <div className="flex-1" />
 
-      <div className="animate-in">
-        <p className={`font-title text-[60px] leading-[0.88] tracking-tight text-center ${isDark ? 'text-bright' : 'text-dark'}`}>
+      <div className="animate-in flex flex-col gap-3">
+        <p className="font-title text-[60px] leading-[0.88] tracking-tight text-center text-dark">
           {interpolate(screen.title, ctx)}
         </p>
+        {screen.subtitle && (
+          <p className="text-cta text-dark text-center">
+            {interpolate(screen.subtitle, ctx)}
+          </p>
+        )}
       </div>
 
       {/* Checklist in white card */}
