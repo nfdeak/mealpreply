@@ -95,8 +95,8 @@ function ProgressVariant({ screen, ctx }) {
         <div className="flex flex-col gap-2">
           {rows.map((row, i) => (
             <div key={i} className="flex justify-between items-center">
-              <span className="text-cta text-grey">{interpolate(row.label, ctx)}</span>
-              <span className="text-cta text-dark font-bold">{interpolate(row.value, ctx)}</span>
+              <span className="text-cta text-grey">{interpolate(row.label, ctx)} →</span>
+              <span className="text-cta text-dark">{interpolate(row.value, ctx)}</span>
             </div>
           ))}
         </div>
