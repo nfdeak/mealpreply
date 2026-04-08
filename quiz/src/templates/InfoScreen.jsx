@@ -26,14 +26,14 @@ function InsightVariant({ screen, ctx }) {
   const cards = screen.cards || []
   return (
     <>
-      {/* Hero image — family photo */}
-      {screen.heroImage ? (
-        <div className="w-full max-h-[220px] overflow-hidden rounded-2xl animate-in">
-          <img src={assetUrl(screen.heroImage)} alt="" className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <div className="w-full flex-1 max-h-[220px] rounded-2xl bg-white/10 flex items-center justify-center animate-in">
-          <span className="text-bright/40 text-small">image</span>
+      {/* Hero image */}
+      {screen.heroImage && (
+        <div className="w-full flex justify-center animate-in">
+          <img
+            src={assetUrl(screen.heroImage)}
+            alt=""
+            className="max-h-[240px] w-auto object-contain"
+          />
         </div>
       )}
 
