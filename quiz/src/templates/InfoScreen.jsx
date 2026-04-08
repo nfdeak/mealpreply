@@ -133,28 +133,42 @@ function ValueDemoVariant({ screen, ctx }) {
         </h1>
       </div>
 
-      {/* Highlight card — green with banana flush to bottom-left */}
+      {/* Highlight card — green with banana clipped at the waist, flush bottom-left */}
       {screen.highlightCard && (
-        <div className="animate-in delay-2 flex items-end gap-3 bg-green rounded-2xl py-4 pr-4 pl-0 w-full overflow-hidden relative">
-          <div className="w-[130px] h-[130px] shrink-0 relative self-end">
+        <div className="animate-in delay-2 flex items-stretch gap-3 bg-green rounded-2xl pr-4 w-full overflow-hidden">
+          <div className="w-[120px] shrink-0 relative overflow-hidden self-stretch">
             {screen.highlightCard.image && (
               <img
                 src={assetUrl(screen.highlightCard.image)}
                 alt=""
-                className="absolute left-1/2 -translate-x-1/2 bottom-0 h-[200px] max-w-none object-contain animate-banana-bob"
+                className="absolute left-1/2 -translate-x-1/2 bottom-0 h-[200px] max-w-none object-contain"
               />
             )}
           </div>
-          <div className="flex flex-col gap-1.5 flex-1 self-center py-2">
+          <div className="flex flex-col gap-1.5 flex-1 py-4 justify-center">
             {screen.highlightCard.lines.map((line, i) => (
-              <p key={i} className="text-body font-semibold text-dark leading-tight">{interpolate(line, ctx)}</p>
+              <p
+                key={i}
+                className="text-body font-semibold text-dark leading-tight animate-in"
+                style={{ animationDelay: `${300 + i * 140}ms` }}
+              >
+                {interpolate(line, ctx)}
+              </p>
             ))}
           </div>
         </div>
       )}
 
-      {/* Recipe list — single white card, thick black dividers only between rows */}
-      <div className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3">
+      {/* Recipe list — single white card, thick black dividers only between rows.
+          CSS mask softly fades the bottom so it dissolves into the violet bg without
+          a hard line, no overlay needed. */}
+      <div
+        className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3"
+        style={{
+          WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 110px), transparent 100%)',
+          maskImage: 'linear-gradient(to bottom, black calc(100% - 110px), transparent 100%)',
+        }}
+      >
         {recipes.map((recipe, i) => {
           const servings = recipe.servings ?? ctx.totalPeople ?? 4
           return (
@@ -211,7 +225,8 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
   const isImageBg = screen.theme === 'image'
 
   const wrapperClasses = [
-    'flex flex-col gap-4 min-h-dvh px-5 pt-4 pb-28',
+    'flex flex-col gap-4 min-h-dvh px-5 pt-4',
+    variant === 'value_demo' ? 'pb-12' : 'pb-28',
     isDark ? 'screen-dark' : '',
     isImageBg ? 'screen-image-bg' : '',
     !isDark && !isImageBg ? 'bg-bright' : '',
@@ -248,14 +263,6 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
       </div>
 
       <div className="flex-1" />
-
-      {/* Fade to bottom for value_demo so recipe list dissolves into the CTA footer */}
-      {variant === 'value_demo' && (
-        <div
-          className="fixed bottom-0 left-0 right-0 h-64 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, var(--color-violett) 30%, transparent 100%)' }}
-        />
-      )}
 
       {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
       <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
