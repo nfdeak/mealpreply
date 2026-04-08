@@ -1667,7 +1667,7 @@
               "name": "ps3",
               "height": "fit_content",
               "x": 20,
-              "y": 293.5,
+              "y": 324,
               "descendants": {
                 "7xYW3": {
                   "width": "fill_container",
@@ -1710,11 +1710,11 @@
                   "x": 337
                 },
                 "Ge8ay": {
-                  "width": "fill_container",
+                  "width": "fill_container(408)",
                   "y": 215
                 },
                 "D3nKC": {
-                  "width": "fill_container",
+                  "width": "fill_container(408)",
                   "height": "fit_content",
                   "y": 232
                 },
@@ -4320,7 +4320,8 @@
                     "n7bQd": {
                       "x": 4.141207991750179,
                       "y": 3.8612416075258302,
-                      "rotation": -1.0026069307304066
+                      "rotation": -1.0026069307304066,
+                      "content": "x"
                     }
                   }
                 },
@@ -5580,7 +5581,7 @@
               "type": "ref",
               "ref": "OWgYE",
               "x": 20,
-              "y": 336.5,
+              "y": 367,
               "fill": "$bright",
               "cornerRadius": 12,
               "padding": 20,
@@ -5632,12 +5633,12 @@
                   "x": 297
                 },
                 "Ge8ay": {
-                  "width": "fill_container",
+                  "width": "fill_container(368)",
                   "x": 20,
                   "y": 215
                 },
                 "D3nKC": {
-                  "width": "fill_container",
+                  "width": "fill_container(368)",
                   "height": "fit_content",
                   "flipX": false,
                   "flipY": false,
@@ -6783,7 +6784,7 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": 124,
-                  "fill": "$bright",
+                  "fill": "$green",
                   "cornerRadius": 12,
                   "layout": "vertical",
                   "gap": 10,
@@ -6811,11 +6812,11 @@
                           "name": "spacer",
                           "flipX": true,
                           "width": "fill_container(161)",
-                          "height": "fill_container(155)",
+                          "height": "fill_container(157)",
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "HappyBanana.png",
+                            "url": "/home/nata/Work/projects/mealpreply/quiz/public/HappyBanana.png",
                             "mode": "fill"
                           }
                         },
@@ -6891,7 +6892,7 @@
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "Tricia Timney Photo.jpg",
+                        "url": "../../../../le-buzz-studio-jlNtfHi8oiI-unsplash.jpg",
                         "mode": "fill"
                       },
                       "cornerRadius": 10
@@ -7235,8 +7236,11 @@
             {
               "type": "frame",
               "id": "u9EpV",
+              "x": 20,
+              "y": 420,
               "name": "spacer",
-              "width": "fill_container",
+              "enabled": false,
+              "width": "fill_container(408)",
               "height": "fit_content(285)"
             },
             {
@@ -7280,11 +7284,12 @@
               "type": "ref",
               "ref": "hIflG",
               "name": "cta",
-              "width": "fill_container",
+              "width": "fill_container(408)",
               "height": "fit_content",
               "x": 20.035916939448366,
-              "y": 721,
+              "y": 420,
               "rotation": -0.02421046005479679,
+              "enabled": false,
               "descendants": {
                 "8hVEG": {
                   "width": "fill_container"
@@ -9864,16 +9869,22 @@
             {
               "type": "rectangle",
               "id": "Ge8ay",
+              "x": 0,
+              "y": 215,
               "name": "divider",
+              "enabled": false,
               "fill": "$border",
-              "width": "fill_container",
+              "width": "fill_container(408)",
               "height": 1
             },
             {
               "type": "frame",
               "id": "D3nKC",
+              "x": 0,
+              "y": 232,
               "name": "Frame 427320883",
-              "width": "fill_container",
+              "enabled": false,
+              "width": "fill_container(408)",
               "gap": 8,
               "alignItems": "center",
               "children": [

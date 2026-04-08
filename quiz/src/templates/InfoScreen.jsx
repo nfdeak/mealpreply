@@ -133,12 +133,16 @@ function ValueDemoVariant({ screen, ctx }) {
         </h1>
       </div>
 
-      {/* Highlight card — green, bolt style */}
+      {/* Highlight card — green with banana masked / cropped at waist */}
       {screen.highlightCard && (
-        <div className="animate-in delay-2 flex items-center gap-3 bg-green rounded-2xl border-2 border-dark p-3 w-full">
-          <div className="w-[100px] h-[100px] shrink-0 flex items-center justify-center overflow-hidden">
+        <div className="animate-in delay-2 flex items-center gap-3 bg-green rounded-2xl p-3 pr-4 w-full overflow-hidden">
+          <div className="w-[110px] h-[110px] shrink-0 overflow-hidden relative">
             {screen.highlightCard.image && (
-              <img src={assetUrl(screen.highlightCard.image)} alt="" className="w-full h-full object-contain" />
+              <img
+                src={assetUrl(screen.highlightCard.image)}
+                alt=""
+                className="absolute left-1/2 -translate-x-1/2 top-0 h-[180px] max-w-none object-contain"
+              />
             )}
           </div>
           <div className="flex flex-col gap-1.5 flex-1">
@@ -149,19 +153,19 @@ function ValueDemoVariant({ screen, ctx }) {
         </div>
       )}
 
-      {/* Recipe list — single bolt-styled card, rows separated by thick dividers */}
-      <div className="bg-bright rounded-2xl border-2 border-dark w-full overflow-hidden animate-in delay-3">
+      {/* Recipe list — single white card, thick black dividers only between rows */}
+      <div className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3">
         {recipes.map((recipe, i) => {
-          const servings = ctx.totalPeople || 4
+          const servings = recipe.servings ?? ctx.totalPeople ?? 4
           return (
             <div
               key={i}
               className={`flex items-center gap-3 p-3 ${i > 0 ? 'border-t-2 border-dark' : ''}`}
             >
               {recipe.image ? (
-                <img src={assetUrl(recipe.image)} alt="" className="w-20 h-20 shrink-0 rounded-xl border-2 border-dark object-cover" />
+                <img src={assetUrl(recipe.image)} alt="" className="w-20 h-20 shrink-0 rounded-xl object-cover" />
               ) : (
-                <div className="w-20 h-20 shrink-0 rounded-xl border-2 border-dark bg-border/30 flex items-center justify-center">
+                <div className="w-20 h-20 shrink-0 rounded-xl bg-border/30 flex items-center justify-center">
                   <span className="text-micro text-grey">photo</span>
                 </div>
               )}
@@ -247,7 +251,10 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
 
       {/* Fade to bottom for value_demo so recipe list dissolves into the CTA footer */}
       {variant === 'value_demo' && (
-        <div className="fixed bottom-0 left-0 right-0 h-48 z-10 bg-gradient-to-t from-violett via-violett/85 to-transparent pointer-events-none" />
+        <div
+          className="fixed bottom-0 left-0 right-0 h-64 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, var(--color-violett) 30%, transparent 100%)' }}
+        />
       )}
 
       {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
