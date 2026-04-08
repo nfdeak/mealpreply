@@ -139,7 +139,7 @@ export default function InterstitialScreen({ screen, step, totalSteps, ctx = {},
   return (
     <div
       className={wrapperClasses}
-      style={isImageBg && screen.bgImage ? { backgroundImage: `url(${screen.bgImage})` } : undefined}
+      style={isImageBg && screen.bgImage ? { backgroundImage: `url(${assetUrl(screen.bgImage)})` } : undefined}
     >
       {/* Back arrow — absolute on image-bg, normal flow otherwise */}
       {isImageBg ? (

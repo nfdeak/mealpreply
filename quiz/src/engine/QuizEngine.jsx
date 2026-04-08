@@ -11,6 +11,7 @@ import SingleChoiceDynamicScreen from '../templates/SingleChoiceDynamicScreen'
 import InfoScreen from '../templates/InfoScreen'
 import CaptureScreen from '../templates/CaptureScreen'
 import { getOrCreateSessionId, trackEvent, trackEventOnce } from '../lib/gsheetsTelemetry'
+import { assetUrl } from '../utils/assetUrl'
 
 const templates = {
   welcome: WelcomeScreen,
@@ -131,7 +132,7 @@ export default function QuizEngine({ config }) {
     } else if (theme === 'image') {
       body.classList.add('theme-image')
       if (currentScreen?.bgImage) {
-        body.style.backgroundImage = `url(${currentScreen.bgImage})`
+        body.style.backgroundImage = `url(${assetUrl(currentScreen.bgImage)})`
       }
     }
     return () => {

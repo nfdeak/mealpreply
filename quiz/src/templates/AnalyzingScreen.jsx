@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { interpolate } from '../engine/computeVars'
+import { assetUrl } from '../utils/assetUrl'
 
 function ChecklistItem({ label, done }) {
   return (
@@ -40,7 +41,7 @@ export default function AnalyzingScreen({ screen, ctx = {}, onNext, onBack }) {
   return (
     <div
       className={`flex flex-col items-center gap-6 min-h-dvh px-5 pt-4 pb-28 ${isDark ? 'screen-image-bg' : 'bg-bright'}`}
-      style={isDark && screen.bgImage ? { backgroundImage: `url(${screen.bgImage})` } : undefined}
+      style={isDark && screen.bgImage ? { backgroundImage: `url(${assetUrl(screen.bgImage)})` } : undefined}
     >
       <div className="w-full animate-in">
         <button onClick={onBack} className="w-10 h-10 flex items-center justify-start cursor-pointer text-dark">
