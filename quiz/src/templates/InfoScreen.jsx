@@ -256,6 +256,10 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
 
       <div className="flex-1" />
 
+      {/* Soft violet-to-transparent fade behind the CTA for value_demo */}
+      {variant === 'value_demo' && (
+        <div className="fixed bottom-0 left-0 right-0 h-48 z-10 bg-gradient-to-t from-violett via-violett/85 to-transparent pointer-events-none" />
+      )}
 
       {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
       <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
