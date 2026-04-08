@@ -141,7 +141,7 @@ function ValueDemoVariant({ screen, ctx }) {
               <img
                 src={assetUrl(screen.highlightCard.image)}
                 alt=""
-                className="absolute left-1/2 -translate-x-1/2 bottom-0 h-[200px] max-w-none object-contain"
+                className="absolute left-1/2 -translate-x-1/2 top-2 h-[180px] max-w-none object-contain"
               />
             )}
           </div>
@@ -159,16 +159,8 @@ function ValueDemoVariant({ screen, ctx }) {
         </div>
       )}
 
-      {/* Recipe list — single white card, thick black dividers only between rows.
-          CSS mask softly fades the bottom so it dissolves into the violet bg without
-          a hard line, no overlay needed. */}
-      <div
-        className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3"
-        style={{
-          WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 110px), transparent 100%)',
-          maskImage: 'linear-gradient(to bottom, black calc(100% - 110px), transparent 100%)',
-        }}
-      >
+      {/* Recipe list — single white card, thick black dividers only between rows */}
+      <div className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3">
         {recipes.map((recipe, i) => {
           const servings = recipe.servings ?? ctx.totalPeople ?? 4
           return (
@@ -263,6 +255,17 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
       </div>
 
       <div className="flex-1" />
+
+      {/* Soft violet-to-transparent fade sitting above the CTA — covers the last
+          recipe rows on scroll AND at initial load so there's no hard cutoff line. */}
+      {variant === 'value_demo' && (
+        <div
+          className="fixed left-0 right-0 bottom-0 h-56 z-10 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, rgb(77 73 214) 0%, rgb(77 73 214) 35%, rgba(77,73,214,0) 100%)',
+          }}
+        />
+      )}
 
       {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
       <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
