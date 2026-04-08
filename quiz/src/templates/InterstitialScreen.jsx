@@ -107,7 +107,7 @@ function ProgressVariant({ screen, ctx }) {
             <div className="h-full bg-green rounded-full" style={{ width: '78%' }} />
           </div>
           {screen.progressMessage && (
-            <p className="text-small text-grey text-center w-full mt-3">{screen.progressMessage}</p>
+            <p className="text-cta text-dark text-center w-full mt-3">{screen.progressMessage}</p>
           )}
         </div>
       </div>
