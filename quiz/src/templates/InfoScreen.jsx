@@ -28,11 +28,11 @@ function InsightVariant({ screen, ctx }) {
     <>
       {/* Hero image — overflows above the viewport top */}
       {screen.heroImage && (
-        <div className="w-full flex justify-center animate-in -mt-16 -mb-8">
+        <div className="w-full flex justify-center animate-in -mt-24 -mb-12">
           <img
             src={assetUrl(screen.heroImage)}
             alt=""
-            className="max-h-[360px] w-auto object-contain"
+            className="max-h-[324px] w-auto object-contain"
           />
         </div>
       )}
