@@ -77,7 +77,7 @@ export default function AnalyzingScreen({ screen, ctx = {}, onNext, onBack }) {
               style={{ width: `${progress}%` }}
             />
           </div>
-          <span className="text-body text-violett font-semibold tabular-nums shrink-0 w-10 text-right">
+          <span className="font-title text-cta text-violett tabular-nums shrink-0 w-12 text-right">
             {Math.round(progress)}%
           </span>
         </div>
