@@ -177,8 +177,8 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
   const isImageBg = screen.theme === 'image'
 
   const wrapperClasses = [
-    'flex flex-col gap-4 min-h-dvh px-5 pt-4',
-    isDark ? 'screen-dark pb-6' : 'pb-28',
+    'flex flex-col gap-4 min-h-dvh px-5 pt-4 pb-28',
+    isDark ? 'screen-dark' : '',
     isImageBg ? 'screen-image-bg' : '',
     !isDark && !isImageBg ? 'bg-bright' : '',
   ].filter(Boolean).join(' ')
@@ -213,17 +213,12 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
 
       <div className="flex-1" />
 
-      {isDark ? (
-        <div className="w-full max-w-[448px] mx-auto pb-4">
+      {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
+      <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
+        <div className="max-w-[448px] mx-auto">
           <Button label={screen.cta || 'Continue →'} onClick={onNext} />
         </div>
-      ) : (
-        <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
-          <div className="max-w-[448px] mx-auto">
-            <Button label={screen.cta || 'Continue →'} onClick={onNext} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

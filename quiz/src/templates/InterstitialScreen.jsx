@@ -123,10 +123,10 @@ export default function InterstitialScreen({ screen, step, totalSteps, ctx = {},
   const isImageBg = screen.theme === 'image'
 
   const wrapperClasses = [
-    'flex flex-col items-center gap-6 min-h-dvh px-5',
-    isDark ? 'screen-dark pt-10 pb-6' : 'pb-28',
+    'flex flex-col items-center gap-6 min-h-dvh px-5 pt-4 pb-28',
+    isDark ? 'screen-dark' : '',
     isImageBg ? 'screen-image-bg pt-32' : '',
-    !isDark && !isImageBg ? 'bg-bright pt-4' : '',
+    !isDark && !isImageBg ? 'bg-bright' : '',
   ].filter(Boolean).join(' ')
 
   const backArrowColor = isDark ? 'text-bright' : 'text-dark'
@@ -164,20 +164,12 @@ export default function InterstitialScreen({ screen, step, totalSteps, ctx = {},
       {variant === 'bridge' && <BridgeVariant screen={screen} ctx={ctx} />}
       {variant === 'progress' && <ProgressVariant screen={screen} ctx={ctx} />}
 
-      {variant !== 'progress' && <div className="flex-1" />}
-
-      {/* Dark screens: inline CTA, no fixed footer. Light/image screens: fixed footer with gradient */}
-      {isDark ? (
-        <div className="w-full max-w-[448px] mx-auto pb-4">
+      {/* Fixed CTA footer: solid violet on dark, gradient fade on light/image */}
+      <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
+        <div className="max-w-[448px] mx-auto">
           <Button label={screen.cta || 'Continue →'} onClick={onNext} />
         </div>
-      ) : (
-        <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
-          <div className="max-w-[448px] mx-auto">
-            <Button label={screen.cta || 'Continue →'} onClick={onNext} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

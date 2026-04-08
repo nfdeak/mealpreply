@@ -252,8 +252,8 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
   const isDark = screen.theme === 'dark'
 
   const wrapperClasses = [
-    'flex flex-col gap-5 min-h-dvh px-5 pt-4',
-    isDark ? 'screen-dark pb-6' : 'bg-bright pb-28',
+    'flex flex-col gap-5 min-h-dvh px-5 pt-4 pb-28',
+    isDark ? 'screen-dark' : 'bg-bright',
   ].join(' ')
 
   const arrowColor = isDark ? 'text-bright' : 'text-dark'
@@ -294,10 +294,10 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
 
       <div className="flex-1" />
 
-      {/* Dark screens: inline CTA. Light screens: fixed footer with gradient */}
-      {isDark ? (
-        <div className="w-full max-w-[448px] mx-auto pb-4 flex flex-col items-center gap-2">
-          {variant === 'paywall' ? (
+      {/* Fixed CTA footer: solid violet on dark, gradient fade on light */}
+      <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
+        <div className="max-w-[448px] mx-auto flex flex-col items-center gap-2">
+          {isDark && variant === 'paywall' ? (
             <button
               onClick={onNext}
               className="w-full h-[50px] rounded-full bg-green text-bright font-sans text-cta
@@ -313,28 +313,15 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
               label={screen.cta || 'Continue →'}
               onClick={onNext}
               className={variant === 'email' && !isEmailValid ? 'opacity-40 pointer-events-none' : 'opacity-100'}
-            />
-          )}
-          {screen.trustText && (
-            <p className="text-small text-center text-bright">{screen.trustText}</p>
-          )}
-        </div>
-      ) : (
-        <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
-          <div className="max-w-[448px] mx-auto flex flex-col items-center gap-2">
-            <Button
-              label={screen.cta || 'Continue →'}
-              onClick={onNext}
-              className={variant === 'email' && !isEmailValid ? 'opacity-40 pointer-events-none' : 'opacity-100'}
               data-event={variant === 'email' ? 'email_submitted' : variant === 'paywall' ? 'paywall_cta_clicked' : undefined}
               data-segment={ctx.lifeStage}
             />
-            {screen.trustText && (
-              <p className="text-small text-center text-grey">{screen.trustText}</p>
-            )}
-          </div>
+          )}
+          {screen.trustText && (
+            <p className={`text-small text-center ${isDark ? 'text-bright' : 'text-grey'}`}>{screen.trustText}</p>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }
