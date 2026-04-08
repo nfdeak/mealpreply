@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Button from '../components/atoms/Button'
 import { interpolate } from '../engine/computeVars'
 import { assetUrl } from '../utils/assetUrl'
+import parseHighlight from '../utils/parseHighlight'
 
 function StatVariant({ screen, ctx }) {
   return (
@@ -104,18 +105,17 @@ function ProgressVariant({ screen, ctx }) {
           {rows.map((row, i) => (
             <div key={i} className="flex justify-between items-center">
               <span className="text-cta text-grey">{interpolate(row.label, ctx)} →</span>
-              <span className="text-cta text-dark">{interpolate(row.value, ctx)}</span>
+              <span className="text-cta text-dark">
+                {parseHighlight(`==${interpolate(row.value, ctx)}==`)}
+              </span>
             </div>
           ))}
         </div>
-        <div className="mt-5 flex items-center gap-2">
-          <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
-            <div
-              className="h-full bg-violett rounded-full transition-all duration-1200 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <img src={assetUrl('/AppleIcon.png')} alt="" className="w-6 h-6 shrink-0 object-contain" />
+        <div className="mt-5 w-full h-1.5 bg-border rounded-full overflow-hidden">
+          <div
+            className="h-full bg-violett rounded-full transition-all duration-1200 ease-out"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 
