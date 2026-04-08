@@ -106,9 +106,6 @@ function ProgressVariant({ screen, ctx }) {
           </div>
           <img src={assetUrl('/fire.png')} alt="" className="w-6 h-6 shrink-0" />
         </div>
-        {screen.progressMessage && (
-          <p className="text-cta text-dark text-center w-full mt-5">{screen.progressMessage}</p>
-        )}
       </div>
 
       <div className="flex-1" />
