@@ -252,8 +252,8 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
   const isDark = screen.theme === 'dark'
 
   const wrapperClasses = [
-    'flex flex-col gap-5 min-h-dvh px-5 pb-28',
-    isDark ? 'screen-dark pt-10' : 'bg-bright pt-4',
+    'flex flex-col gap-5 min-h-dvh px-5 pt-4 pb-28',
+    isDark ? 'screen-dark' : 'bg-bright',
   ].join(' ')
 
   const arrowColor = isDark ? 'text-bright' : 'text-dark'
@@ -276,21 +276,23 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
         </button>
       </div>
 
-      {variant === 'email' && (
-        <div className="flex flex-col gap-5 w-full" data-event="email_submitted" data-segment={ctx.lifeStage}>
-          <EmailVariant screen={screen} ctx={ctx} answer={answer} onSelect={onSelect} />
-        </div>
-      )}
-      {variant === 'paywall' && (
-        <div className="flex flex-col gap-5 w-full" data-event="paywall_viewed" data-segment={ctx.lifeStage}>
-          <PaywallVariant screen={screen} ctx={ctx} />
-        </div>
-      )}
-      {variant === 'waitlist' && (
-        <div className="flex flex-col gap-5 w-full" data-event="waitlist_confirmed" data-segment={ctx.lifeStage}>
-          <WaitlistVariant screen={screen} ctx={ctx} />
-        </div>
-      )}
+      <div className={`flex flex-col gap-5 w-full ${isDark ? 'mt-6' : ''}`}>
+        {variant === 'email' && (
+          <div className="flex flex-col gap-5 w-full" data-event="email_submitted" data-segment={ctx.lifeStage}>
+            <EmailVariant screen={screen} ctx={ctx} answer={answer} onSelect={onSelect} />
+          </div>
+        )}
+        {variant === 'paywall' && (
+          <div className="flex flex-col gap-5 w-full" data-event="paywall_viewed" data-segment={ctx.lifeStage}>
+            <PaywallVariant screen={screen} ctx={ctx} />
+          </div>
+        )}
+        {variant === 'waitlist' && (
+          <div className="flex flex-col gap-5 w-full" data-event="waitlist_confirmed" data-segment={ctx.lifeStage}>
+            <WaitlistVariant screen={screen} ctx={ctx} />
+          </div>
+        )}
+      </div>
 
       <div className="flex-1" />
 

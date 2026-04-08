@@ -207,8 +207,8 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
   const isImageBg = screen.theme === 'image'
 
   const wrapperClasses = [
-    'flex flex-col gap-4 min-h-dvh px-5 pb-28',
-    isDark ? 'screen-dark pt-10' : 'pt-4',
+    'flex flex-col gap-4 min-h-dvh px-5 pt-4 pb-28',
+    isDark ? 'screen-dark' : '',
     isImageBg ? 'screen-image-bg' : '',
     !isDark && !isImageBg ? 'bg-bright' : '',
   ].filter(Boolean).join(' ')
@@ -237,9 +237,11 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
         </button>
       </div>
 
-      {variant === 'insight' && <InsightVariant screen={screen} ctx={ctx} />}
-      {variant === 'solution' && <SolutionVariant screen={screen} ctx={ctx} />}
-      {variant === 'value_demo' && <ValueDemoVariant screen={screen} ctx={ctx} />}
+      <div className={`flex flex-col gap-4 ${isDark ? 'mt-6' : ''}`}>
+        {variant === 'insight' && <InsightVariant screen={screen} ctx={ctx} />}
+        {variant === 'solution' && <SolutionVariant screen={screen} ctx={ctx} />}
+        {variant === 'value_demo' && <ValueDemoVariant screen={screen} ctx={ctx} />}
+      </div>
 
       <div className="flex-1" />
 
