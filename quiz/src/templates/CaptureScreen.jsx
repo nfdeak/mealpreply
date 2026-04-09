@@ -21,6 +21,7 @@
  * or wrap onNext callbacks to fire analytics before navigation.
  */
 
+import { useState } from 'react'
 import Button from '../components/atoms/Button'
 import TextInput from '../components/atoms/TextInput'
 import { interpolate } from '../engine/computeVars'
@@ -91,126 +92,202 @@ function EmailVariant({ screen, ctx, answer, onSelect }) {
   )
 }
 
+function PricingCard({ plan, selected, onSelect }) {
+  const isPopular = plan.popular
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(plan.id)}
+      className={`w-full rounded-2xl p-4 flex items-center gap-4 cursor-pointer transition-all relative
+        ${selected ? 'bg-bright border-2 border-green shadow-lg' : 'bg-bright border-2 border-border'}
+        ${isPopular ? 'py-5' : ''}`}
+    >
+      {isPopular && (
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green text-bright text-micro font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+          Most Popular
+        </span>
+      )}
+      <div className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center
+        ${selected ? 'border-green' : 'border-border'}`}>
+        {selected && <div className="w-2.5 h-2.5 rounded-full bg-green" />}
+      </div>
+      <div className="flex-1 text-left">
+        <p className="text-body font-bold text-dark">{plan.label}</p>
+        <p className="text-small text-grey">
+          <span className="line-through">${plan.oldPrice}</span>{' '}
+          <span className="text-dark font-semibold">${plan.price}</span>
+        </p>
+      </div>
+      <div className="text-right">
+        <div className="flex items-baseline gap-0.5">
+          <span className="text-small text-grey">$</span>
+          <span className="font-title text-[36px] leading-none text-dark">{plan.perDay.split('.')[0]}</span>
+          <span className="text-body text-dark font-bold">.{plan.perDay.split('.')[1]}</span>
+        </div>
+        <p className="text-micro text-grey">per day</p>
+      </div>
+    </button>
+  )
+}
+
 function PaywallVariant({ screen, ctx }) {
-  const pricing = screen.pricing || {}
+  const plans = screen.plans || []
   const faqs = screen.faqs || []
-  const previewPhotos = screen.previewPhotos || []
-  const features = screen.features || []
   const testimonials = screen.paywallTestimonials || []
+  const benefits = screen.benefits || []
+  const [selectedPlan, setSelectedPlan] = useState(plans.find(p => p.popular)?.id || plans[0]?.id)
+  const [showPopup, setShowPopup] = useState(false)
+  const selected = plans.find(p => p.id === selectedPlan) || plans[0]
 
   return (
     <>
-      {/* Hero section */}
-      <div className="flex flex-col items-center gap-2 animate-in delay-1 w-full">
-        <h1 className="font-title text-[38px] leading-[1.08] text-bright text-center">
+      {/* Hero */}
+      <div className="flex flex-col items-center gap-3 animate-in delay-1 w-full">
+        <h1 className="font-title text-[36px] leading-[1.08] tracking-tight text-bright text-center">
           {interpolate(screen.title, ctx)}
         </h1>
         {screen.heroSubtitle && (
-          <p className="text-small text-bright/70 text-center">
+          <p className="text-cta text-bright/80 text-center">
             {interpolate(screen.heroSubtitle, ctx)}
           </p>
         )}
-        {/* Hero image */}
-        {screen.heroImage ? (
-          <div className="w-full h-[220px] rounded-2xl overflow-hidden mt-2">
-            <img src={assetUrl(screen.heroImage)} alt="" className="w-full h-full object-cover" />
-          </div>
-        ) : (
-          <div className="w-full h-[220px] rounded-2xl bg-white/10 flex items-center justify-center mt-2">
-            <span className="text-bright/40 text-small">hero image</span>
+        {screen.heroImage && (
+          <div className="w-full flex justify-center mt-2">
+            <img src={assetUrl(screen.heroImage)} alt="" className="max-h-[200px] w-auto object-contain" />
           </div>
         )}
       </div>
 
-      {/* Social proof — pink card with laurels + testimonials */}
-      <div className="bg-pink rounded-2xl pt-4 pb-5 px-5 w-full animate-in delay-2">
-        {/* Rating badge with laurels */}
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <img src={assetUrl('/laurel_l.png')} alt="" className="w-8 h-10 object-contain" />
-          <div className="flex flex-col items-center">
-            <p className="text-body font-bold text-bright">MealPreply PRO</p>
-            <p className="text-small text-bright">4.8★ · 12K users</p>
-          </div>
-          <img src={assetUrl('/laurel_r.png')} alt="" className="w-8 h-10 object-contain" />
-        </div>
-        {/* Testimonials */}
-        <div className="flex flex-col gap-2.5">
-          {testimonials.map((t, i) => (
-            <div key={i} className="bg-bright rounded-xl p-3 flex flex-col gap-2">
-              <p className="text-small text-dark italic leading-[1.4]">"{interpolate(t.text, ctx)}"</p>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-border shrink-0" />
-                <p className="text-micro text-grey">{interpolate(t.author, ctx)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Plan preview — square food photos + feature cards */}
-      <div className="w-full animate-in delay-2">
-        <p className="text-cta font-bold text-bright mb-3">
-          {screen.previewTitle || "Here's your weekly plan!"}
-        </p>
-        {/* Square photo grid */}
-        <div className="flex gap-2 w-full">
-          {previewPhotos.map((photo, i) => (
-            <div key={i} className="flex-1 aspect-square rounded-xl overflow-hidden border border-white/20">
-              <img src={assetUrl(photo)} alt="" className="w-full h-full object-cover" />
-            </div>
-          ))}
-        </div>
-        {/* Feature cards */}
-        {features.length > 0 && (
-          <div className="flex flex-col gap-2 mt-3">
-            {features.map((feat, i) => (
-              <div key={i} className="bg-white/[0.06] rounded-xl py-3 px-3">
-                <p className="text-small text-bright">{interpolate(feat, ctx)}</p>
+      {/* What you get */}
+      {benefits.length > 0 && (
+        <div className="w-full animate-in delay-2">
+          <h2 className="font-title text-[24px] text-bright text-center mb-4">What you get</h2>
+          <div className="flex flex-col gap-3">
+            {benefits.map((b, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-green shrink-0 mt-0.5">
+                  <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15" />
+                  <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <p className="text-body text-bright leading-[1.4]">{interpolate(b, ctx)}</p>
               </div>
             ))}
           </div>
-        )}
-      </div>
-
-      {/* Pricing card */}
-      <div className="bg-beige rounded-2xl p-5 flex flex-col items-center gap-3 w-full animate-in delay-3">
-        <p className="text-lg font-bold text-violett">{pricing.trial}</p>
-        <p className="text-body text-dark">{pricing.price}</p>
-        <p className="text-small text-grey">{pricing.guarantee}</p>
-        <button
-          onClick={() => {}}
-          className="w-full h-[50px] rounded-full bg-green text-bright font-sans text-cta
-            flex items-center justify-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all mt-1"
-        >
-          {screen.pricingCta || 'Start my free trial →'}
-        </button>
-      </div>
-
-      {/* Guarantee */}
-      {screen.guarantee && (
-        <div className="glass-card rounded-xl p-4 flex flex-col items-center gap-2.5 w-full animate-in delay-3">
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" className="text-green">
-            <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" strokeWidth="2"/>
-          </svg>
-          <p className="text-cta font-bold text-bright">{screen.guarantee.title}</p>
-          <p className="text-small text-bright/70 text-center">{screen.guarantee.text}</p>
         </div>
       )}
+
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <div className="w-full animate-in delay-2">
+          <h2 className="font-title text-[24px] text-bright text-center mb-4">Users love our plans</h2>
+          <div className="flex flex-col gap-3">
+            {testimonials.map((t, i) => {
+              const avatarUrl = interpolate(t.avatar || '', ctx)
+              return (
+                <div key={i} className="bg-bright rounded-2xl p-4">
+                  <div className="flex gap-1 mb-2">
+                    {[...Array(5)].map((_, j) => (
+                      <span key={j} className="text-orange text-body">★</span>
+                    ))}
+                  </div>
+                  <p className="text-body text-dark italic leading-[1.4]">"{interpolate(t.text, ctx)}"</p>
+                  <div className="flex items-center gap-2.5 mt-3">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-border shrink-0" />
+                    )}
+                    <p className="text-small text-grey font-semibold">{interpolate(t.author, ctx)}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Choose Your Plan */}
+      <div className="w-full animate-in delay-3">
+        <h2 className="font-title text-[24px] text-bright text-center mb-5">Choose Your Plan</h2>
+        <div className="flex flex-col gap-4">
+          {plans.map(plan => (
+            <PricingCard key={plan.id} plan={plan} selected={selectedPlan === plan.id} onSelect={setSelectedPlan} />
+          ))}
+        </div>
+      </div>
+
+      {/* 30-day guarantee text */}
+      {screen.guarantee && (
+        <p className="text-body text-bright text-center animate-in delay-3">
+          30-day <span className="text-green font-semibold underline">money back guarantee</span>
+        </p>
+      )}
+
+      {/* CTA — not fixed, inline with content */}
+      <div className="w-full animate-in delay-3 flex flex-col items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setShowPopup(true)}
+          className="w-full h-[56px] rounded-full bg-green text-bright font-sans text-cta font-semibold
+            flex items-center justify-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
+          data-event="paywall_cta_clicked"
+          data-plan={selectedPlan}
+          data-segment={ctx.lifeStage}
+        >
+          Get My Plan — ${selected?.perDay}/day
+        </button>
+        <p className="text-small text-bright/60 text-center">Guaranteed Safe Checkout</p>
+        <div className="flex items-center gap-3 opacity-50">
+          <span className="text-micro text-bright font-bold">VISA</span>
+          <span className="text-micro text-bright font-bold">PayPal</span>
+          <span className="text-micro text-bright font-bold">Mastercard</span>
+        </div>
+      </div>
 
       {/* FAQ */}
       {faqs.length > 0 && (
         <div className="w-full animate-in delay-4">
-          <p className="text-body font-bold text-bright mb-2.5">
-            {screen.faqTitle || 'People often ask'}
-          </p>
+          <h2 className="font-title text-[24px] text-bright text-center mb-4">People often ask</h2>
           <div className="flex flex-col gap-2.5">
             {faqs.map((faq, i) => (
-              <div key={i} className="bg-white/[0.06] rounded-xl py-3 px-3">
-                <p className="text-small font-bold text-bright">{faq.q}</p>
-                <p className="text-small text-bright/70 mt-1">{faq.a}</p>
-              </div>
+              <details key={i} className="bg-bright rounded-xl overflow-hidden group">
+                <summary className="flex items-center justify-between px-4 py-3.5 cursor-pointer text-body font-semibold text-dark list-none">
+                  {faq.q}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-grey shrink-0 transition-transform group-open:rotate-180">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </summary>
+                <div className="px-4 pb-4">
+                  <p className="text-small text-grey leading-[1.5]">{faq.a}</p>
+                </div>
+              </details>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Waitlist popup */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-dark/60" onClick={() => setShowPopup(false)}>
+          <div className="bg-bright rounded-2xl p-6 max-w-sm w-full flex flex-col items-center gap-4 text-center" onClick={e => e.stopPropagation()}>
+            <div className="w-16 h-16 rounded-full bg-green flex items-center justify-center">
+              <span className="text-[28px] text-bright font-bold">✓</span>
+            </div>
+            <h3 className="font-title text-[24px] text-dark">You're on the list!</h3>
+            <p className="text-body text-grey leading-[1.5]">
+              We're in early access and have reached our testing capacity.
+              Your personalized plan is saved — we'll email you the moment a spot opens.
+            </p>
+            {ctx.email && (
+              <p className="text-body text-dark font-semibold">{ctx.email}</p>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowPopup(false)}
+              className="w-full h-12 rounded-full bg-dark text-bright text-body font-semibold cursor-pointer hover:opacity-90 transition-all mt-2"
+            >
+              Got it
+            </button>
           </div>
         </div>
       )}

@@ -1144,35 +1144,31 @@
       "heroSubtitle": "Your personalized weekly plan is ready",
       "heroImage": "/VegeFamily.png",
       "paywallTestimonials": [
-        {"text": "{testimonialText}", "author": "{testimonialAuthor}"},
-        {"text": "The shopping list alone saved me 2 hours a week.", "author": "Mike, busy professional"},
-        {"text": "My kids actually eat dinner now without complaints.", "author": "Sarah, mom of 3"}
+        {"text": "{testimonialText}", "author": "{testimonialAuthor}", "avatar": "{testimonialAvatar}"},
+        {"text": "{testimonial2Text}", "author": "{testimonial2Author}", "avatar": "{testimonial2Avatar}"}
       ],
-      "previewTitle": "Here's your weekly plan!",
-      "previewPhotos": ["/Max Griss Photo.jpg", "/Tricia Timney Photo.jpg", "/Emma Miller Unsplash.jpg"],
-      "features": [
-        "+18 more meals waiting inside",
-        "+ Full prep guides — no thinking required!",
-        "One shopping list for the whole week"
+      "benefits": [
+        "80+ personalized recipes for your family",
+        "Step-by-step prep plan — cook once, eat all week",
+        "Smart shopping list — zero waste",
+        "New recipes added every week",
+        "Works for any dietary needs"
       ],
-      "pricing": {
-        "trial": "14-day free trial",
-        "price": "then $9.99/month",
-        "guarantee": "Cancel anytime • 30-day money-back"
-      },
-      "pricingCta": "Try for $0 →",
+      "plans": [
+        {"id": "monthly", "label": "1-MONTH PLAN", "oldPrice": "39.99", "price": "39.99", "perDay": "1.33"},
+        {"id": "quarterly", "label": "3-MONTH PLAN", "oldPrice": "69.99", "price": "69.99", "perDay": "0.78", "popular": true},
+        {"id": "biannual", "label": "6-MONTH PLAN", "oldPrice": "119.94", "price": "99.99", "perDay": "0.56"}
+      ],
       "guarantee": {
         "title": "30-day money-back guarantee",
         "text": "Try it risk-free. Full refund within 30 days."
       },
-      "faqTitle": "People often ask",
       "faqs": [
-        {"q": "Can I cancel anytime?", "a": "Yes, cancel in one tap."},
-        {"q": "Do I need cooking skills?", "a": "No. Every recipe is beginner-friendly."},
-        {"q": "How fast will I see results?", "a": "Most users feel the difference in week one."}
+        {"q": "What happens after I order?", "a": "You get instant access to your personalized plan, shopping list, and prep guides."},
+        {"q": "Do I need cooking skills?", "a": "No. Every recipe is beginner-friendly with step-by-step instructions."},
+        {"q": "Can I cancel anytime?", "a": "Yes, cancel in one tap. No questions asked."}
       ],
-      "bottomCta": "Start my free trial →",
-      "cta": "Start my free trial →"
+      "cta": "Get My Plan"
     },
 
     {
