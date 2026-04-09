@@ -181,6 +181,46 @@
       },
       "default": "Alex, 32"
     },
+    "testimonialAvatar": {
+      "switch": "lifeStage",
+      "cases": {
+        "busy_parent": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&h=64&fit=crop&crop=face",
+        "health_focus": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face",
+        "busy_pro": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=face",
+        "budget": "https://images.unsplash.com/photo-1522556189639-b150ed9c4330?w=64&h=64&fit=crop&crop=face"
+      },
+      "default": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&h=64&fit=crop&crop=face"
+    },
+    "testimonial2Text": {
+      "switch": "lifeStage",
+      "cases": {
+        "busy_parent": "The shopping list alone saved me 2 hours a week. And my kids love the taco bowls — they have no idea they're eating vegetables.",
+        "health_focus": "I track macros and this nails my protein targets every single day. No more guessing or prepping the same boring rice and chicken.",
+        "busy_pro": "Sunday prep takes me 40 minutes. The rest of the week I just grab and go. My coworkers think I hired a chef.",
+        "budget": "We went from spending $600/month on groceries to $380. Same meals, zero waste. The shopping list is magic."
+      },
+      "default": "The shopping list alone saved me 2 hours. No more guessing what to buy — everything is planned."
+    },
+    "testimonial2Author": {
+      "switch": "lifeStage",
+      "cases": {
+        "busy_parent": "David, 38 — dad of three",
+        "health_focus": "Emma, 26 — nutritionist",
+        "busy_pro": "James, 33 — software engineer",
+        "budget": "Priya, 27 — grad student"
+      },
+      "default": "Jordan, 30"
+    },
+    "testimonial2Avatar": {
+      "switch": "lifeStage",
+      "cases": {
+        "busy_parent": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=face",
+        "health_focus": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face",
+        "busy_pro": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face",
+        "budget": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face"
+      },
+      "default": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=face"
+    },
 
     "_doc_valuedemo": "F-002: Segment-specific value-demo content",
     "valueDemoTitle": {
@@ -1085,8 +1125,8 @@
       "freeBadge": "free",
       "placeholder": "your@email.com",
       "testimonials": [
-        {"text": "{testimonialText}", "author": "{testimonialAuthor}"},
-        {"text": "Finally stopped ordering takeout every night. The shopping list alone saved me 2 hours.", "author": "Mike, busy professional"}
+        {"text": "{testimonialText}", "author": "{testimonialAuthor}", "avatar": "{testimonialAvatar}"},
+        {"text": "{testimonial2Text}", "author": "{testimonial2Author}", "avatar": "{testimonial2Avatar}"}
       ],
       "socialProofBadge": {"title": "TRUSTED BY", "text": "12,000+ users"},
       "trustText": "Your data is never shared or sold",

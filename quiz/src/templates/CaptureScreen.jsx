@@ -70,17 +70,23 @@ function EmailVariant({ screen, ctx, answer, onSelect }) {
         </p>
       )}
 
-      {/* Testimonials — glass cards */}
-      {(screen.testimonials || []).map((t, i) => (
-        <div key={i} className="glass-card rounded-xl p-4 w-full animate-in" style={{ animationDelay: `${(i + 2) * 150}ms` }}>
-          <p className="text-body text-bright italic leading-[1.4]">"{interpolate(t.text, ctx)}"</p>
-          <div className="flex items-center gap-2 mt-2.5">
-            {/* Avatar placeholder */}
-            <div className="w-6 h-6 rounded-full bg-white/20 shrink-0" />
-            <p className="text-small text-bright/80">{interpolate(t.author, ctx)}</p>
+      {/* Testimonials — glass cards with Unsplash avatars */}
+      {(screen.testimonials || []).map((t, i) => {
+        const avatarUrl = interpolate(t.avatar || '', ctx)
+        return (
+          <div key={i} className="bg-white/10 border border-white/15 rounded-xl p-4 w-full animate-in" style={{ animationDelay: `${(i + 2) * 150}ms` }}>
+            <p className="text-body text-bright italic leading-[1.4]">"{interpolate(t.text, ctx)}"</p>
+            <div className="flex items-center gap-2.5 mt-3">
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-white/20 shrink-0" />
+              )}
+              <p className="text-small text-bright/80">{interpolate(t.author, ctx)}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </>
   )
 }
