@@ -135,18 +135,25 @@ function PricingCard({ plan, selected, onSelect }) {
 function ImageSlider({ images }) {
   const [current, setCurrent] = useState(0)
   const touchStart = React.useRef(0)
+
+  // Auto-advance every 3s
+  React.useEffect(() => {
+    const t = setInterval(() => setCurrent(c => (c + 1) % images.length), 3000)
+    return () => clearInterval(t)
+  }, [images.length])
+
   return (
     <div
-      className="w-full overflow-hidden rounded-2xl relative"
+      className="w-full overflow-hidden rounded-2xl border-2 border-dark relative"
       onTouchStart={e => { touchStart.current = e.touches[0].clientX }}
       onTouchEnd={e => {
         const diff = touchStart.current - e.changedTouches[0].clientX
-        if (diff > 50 && current < images.length - 1) setCurrent(c => c + 1)
-        if (diff < -50 && current > 0) setCurrent(c => c - 1)
+        if (diff > 50) setCurrent(c => (c + 1) % images.length)
+        if (diff < -50) setCurrent(c => (c - 1 + images.length) % images.length)
       }}
     >
       <div
-        className="flex transition-transform duration-300 ease-out"
+        className="flex transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {images.map((img, i) => (
@@ -155,21 +162,19 @@ function ImageSlider({ images }) {
       </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
         {images.map((_, i) => (
-          <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-dark w-4' : 'bg-dark/30'}`} />
+          <div key={i} className={`h-2 rounded-full transition-all ${i === current ? 'bg-dark w-5' : 'bg-dark/30 w-2'}`} />
         ))}
       </div>
     </div>
   )
 }
 
-function PaywallVariant({ screen, ctx }) {
+function PaywallVariant({ screen, ctx, onBuy, selectedPlan, setSelectedPlan }) {
   const plans = screen.plans || []
   const faqs = screen.faqs || []
   const testimonials = screen.paywallTestimonials || []
   const benefits = screen.benefits || []
   const sliderImages = (screen.sliderImages || []).map(p => assetUrl(p))
-  const [selectedPlan, setSelectedPlan] = useState(plans.find(p => p.popular)?.id || plans[0]?.id)
-  const [showPopup, setShowPopup] = useState(false)
   const [timeLeft, setTimeLeft] = useState(15 * 60)
   const selected = plans.find(p => p.id === selectedPlan) || plans[0]
 
@@ -181,19 +186,22 @@ function PaywallVariant({ screen, ctx }) {
   const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0')
   const secs = String(timeLeft % 60).padStart(2, '0')
 
-  const handleBuy = () => {
-    setShowPopup(true)
-  }
-
   return (
     <>
       {/* Discount banner */}
-      <div className="flex items-center gap-2 bg-green/15 rounded-xl px-4 py-2.5 w-full animate-in">
+      <div className="flex items-center gap-2 bg-green/15 border-2 border-green/30 rounded-xl px-4 py-2.5 w-full animate-in">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-green shrink-0">
           <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2" />
           <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <p className="text-body font-semibold text-green">15% discount applied!</p>
+      </div>
+
+      {/* Title — above the slider */}
+      <div className="animate-in delay-1 w-full">
+        <h1 className="font-title text-[32px] leading-[1.1] tracking-tight text-dark">
+          {interpolate(screen.title, ctx)}
+        </h1>
       </div>
 
       {/* Image slider */}
@@ -202,13 +210,6 @@ function PaywallVariant({ screen, ctx }) {
           <ImageSlider images={sliderImages} />
         </div>
       )}
-
-      {/* Title */}
-      <div className="animate-in delay-1 w-full">
-        <h1 className="font-title text-[32px] leading-[1.1] tracking-tight text-dark">
-          {interpolate(screen.title, ctx)}
-        </h1>
-      </div>
 
       {/* What you get */}
       {benefits.length > 0 && (
@@ -229,7 +230,7 @@ function PaywallVariant({ screen, ctx }) {
       )}
 
       {/* Time remaining */}
-      <div className="bg-beige border-2 border-border rounded-2xl py-4 px-5 w-full text-center animate-in delay-2">
+      <div className="bg-beige border-2 border-dark rounded-2xl py-4 px-5 w-full text-center animate-in delay-2">
         <p className="text-body text-dark">Your personalized plan has been saved for the next 15 minutes</p>
         <p className="text-body font-bold text-dark mt-2">Time remaining:</p>
         <p className="font-title text-[40px] text-dark leading-none mt-1">{mins}:{secs}</p>
@@ -237,7 +238,7 @@ function PaywallVariant({ screen, ctx }) {
 
       {/* Money back guarantee */}
       {screen.guarantee && (
-        <div className="border-2 border-border rounded-2xl p-5 w-full text-center animate-in delay-2">
+        <div className="border-2 border-dark rounded-2xl p-5 w-full text-center animate-in delay-2">
           <h3 className="font-title text-[22px] text-dark mb-2">{screen.guarantee.title}</h3>
           <p className="text-body text-grey leading-[1.5]">{screen.guarantee.text}</p>
         </div>
@@ -262,7 +263,7 @@ function PaywallVariant({ screen, ctx }) {
       <div className="w-full animate-in delay-3 flex flex-col items-center gap-3">
         <button
           type="button"
-          onClick={handleBuy}
+          onClick={onBuy}
           className="w-full h-[56px] rounded-full bg-green text-bright font-sans text-cta font-semibold
             flex items-center justify-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
           data-event="paywall_cta_clicked"
@@ -272,10 +273,10 @@ function PaywallVariant({ screen, ctx }) {
           Get My Plan — ${selected?.perDay}/day
         </button>
         <p className="text-small text-grey text-center">Guaranteed Safe Checkout</p>
-        <div className="flex items-center gap-3 opacity-40">
-          <span className="text-micro text-dark font-bold">VISA</span>
-          <span className="text-micro text-dark font-bold">PayPal</span>
-          <span className="text-micro text-dark font-bold">Mastercard</span>
+        <div className="flex items-center gap-4 mt-1">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-5 opacity-40" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-5 opacity-40" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" className="h-5 opacity-40" />
         </div>
       </div>
 
@@ -315,7 +316,7 @@ function PaywallVariant({ screen, ctx }) {
           <h2 className="font-title text-[24px] text-dark text-center mb-4">People often ask</h2>
           <div className="flex flex-col gap-2.5">
             {faqs.map((faq, i) => (
-              <details key={i} className="bg-beige rounded-xl overflow-hidden group">
+              <details key={i} className="bg-beige border-2 border-dark rounded-xl overflow-hidden group">
                 <summary className="flex items-center justify-between px-4 py-3.5 cursor-pointer text-body font-semibold text-dark list-none">
                   {faq.q}
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-grey shrink-0 transition-transform group-open:rotate-180">
@@ -331,46 +332,6 @@ function PaywallVariant({ screen, ctx }) {
         </div>
       )}
 
-      {/* Bottom CTA repeat */}
-      <div className="w-full animate-in delay-4 flex flex-col items-center gap-2 pb-4">
-        <button
-          type="button"
-          onClick={handleBuy}
-          className="w-full h-[56px] rounded-full bg-green text-bright font-sans text-cta font-semibold
-            flex items-center justify-center cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all"
-          data-event="paywall_cta_clicked"
-          data-plan={selectedPlan}
-          data-segment={ctx.lifeStage}
-        >
-          Get My Plan — ${selected?.perDay}/day
-        </button>
-      </div>
-
-      {/* Waitlist popup */}
-      {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-dark/60" onClick={() => setShowPopup(false)}>
-          <div className="bg-bright rounded-2xl p-6 max-w-sm w-full flex flex-col items-center gap-4 text-center" onClick={e => e.stopPropagation()}>
-            <div className="w-16 h-16 rounded-full bg-green flex items-center justify-center">
-              <span className="text-[28px] text-bright font-bold">✓</span>
-            </div>
-            <h3 className="font-title text-[24px] text-dark">You're on the list!</h3>
-            <p className="text-body text-grey leading-[1.5]">
-              We're in early access and have reached our testing capacity.
-              Your personalized plan is saved — we'll email you the moment a spot opens.
-            </p>
-            {ctx.email && (
-              <p className="text-body text-dark font-semibold">{ctx.email}</p>
-            )}
-            <button
-              type="button"
-              onClick={() => setShowPopup(false)}
-              className="w-full h-12 rounded-full bg-dark text-bright text-body font-semibold cursor-pointer hover:opacity-90 transition-all mt-2"
-            >
-              Got it
-            </button>
-          </div>
-        </div>
-      )}
     </>
   )
 }
@@ -413,16 +374,18 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
   const variant = screen.variant || 'email'
   const isEmailValid = variant !== 'email' || (answer && answer.includes('@'))
   const isDark = screen.theme === 'dark'
+  const isPaywall = variant === 'paywall'
+  const plans = screen.plans || []
+  const [selectedPlan, setSelectedPlan] = useState(plans.find(p => p.popular)?.id || plans[0]?.id)
+  const [showPopup, setShowPopup] = useState(false)
 
   const wrapperClasses = [
-    'flex flex-col gap-5 min-h-dvh px-5 pt-4 pb-28',
+    'flex flex-col gap-5 min-h-dvh px-5 pt-4',
+    isPaywall ? 'pb-8' : 'pb-28',
     isDark ? 'screen-dark' : 'bg-bright',
   ].join(' ')
 
   const arrowColor = isDark ? 'text-bright' : 'text-dark'
-
-  // Paywall variant scrolls naturally, no fixed CTA needed (CTA is inline in pricing card)
-  const showFixedCta = variant !== 'paywall' || !isDark
 
   const ctaFooterBg = isDark
     ? 'bg-violett'
@@ -447,7 +410,13 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
         )}
         {variant === 'paywall' && (
           <div className="flex flex-col gap-5 w-full" data-event="paywall_viewed" data-segment={ctx.lifeStage}>
-            <PaywallVariant screen={screen} ctx={ctx} />
+            <PaywallVariant
+              screen={screen}
+              ctx={ctx}
+              onBuy={() => setShowPopup(true)}
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
+            />
           </div>
         )}
         {variant === 'waitlist' && (
@@ -459,34 +428,49 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
 
       <div className="flex-1" />
 
-      {/* Fixed CTA footer: solid violet on dark, gradient fade on light */}
-      <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
-        <div className="max-w-[448px] mx-auto flex flex-col items-center gap-2">
-          {isDark && variant === 'paywall' ? (
-            <button
-              onClick={onNext}
-              className="w-full h-[50px] rounded-full bg-green text-bright font-sans text-cta
-                flex items-center justify-center cursor-pointer
-                hover:opacity-90 active:scale-[0.98] transition-all"
-              data-event="paywall_cta_clicked"
-              data-segment={ctx.lifeStage}
-            >
-              {screen.bottomCta || screen.cta || 'Start my free trial →'}
-            </button>
-          ) : (
+      {/* Fixed CTA footer — hidden for paywall (inline CTA instead) */}
+      {!isPaywall && (
+        <div className={`fixed bottom-0 left-0 right-0 z-20 px-5 pb-8 pt-2 ${ctaFooterBg}`}>
+          <div className="max-w-[448px] mx-auto flex flex-col items-center gap-2">
             <Button
               label={screen.cta || 'Continue →'}
               onClick={onNext}
               className={variant === 'email' && !isEmailValid ? 'opacity-40 pointer-events-none' : 'opacity-100'}
-              data-event={variant === 'email' ? 'email_submitted' : variant === 'paywall' ? 'paywall_cta_clicked' : undefined}
+              data-event={variant === 'email' ? 'email_submitted' : undefined}
               data-segment={ctx.lifeStage}
             />
-          )}
-          {screen.trustText && (
-            <p className={`text-small text-center ${isDark ? 'text-bright' : 'text-grey'}`}>{screen.trustText}</p>
-          )}
+            {screen.trustText && (
+              <p className={`text-small text-center ${isDark ? 'text-bright' : 'text-grey'}`}>{screen.trustText}</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Waitlist popup */}
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-5 bg-dark/60" onClick={() => setShowPopup(false)}>
+          <div className="bg-bright rounded-2xl p-6 max-w-sm w-full flex flex-col items-center gap-4 text-center" onClick={e => e.stopPropagation()}>
+            <div className="w-16 h-16 rounded-full bg-green flex items-center justify-center">
+              <span className="text-[28px] text-bright font-bold">✓</span>
+            </div>
+            <h3 className="font-title text-[24px] text-dark">You're on the list!</h3>
+            <p className="text-body text-grey leading-[1.5]">
+              We're in early access and have reached our testing capacity.
+              Your personalized plan is saved — we'll email you the moment a spot opens.
+            </p>
+            {ctx.email && (
+              <p className="text-body text-dark font-semibold">{ctx.email}</p>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowPopup(false)}
+              className="w-full h-12 rounded-full bg-dark text-bright text-body font-semibold cursor-pointer hover:opacity-90 transition-all mt-2"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
