@@ -160,59 +160,59 @@ function ValueDemoVariant({ screen, ctx }) {
       )}
 
       {/* Tab bar — visual only, shows the 3 sections of the app */}
-      <div className="flex w-full bg-bright rounded-t-2xl overflow-hidden animate-in delay-3 border-b-2 border-dark">
+      <div className="flex w-full bg-bright rounded-t-2xl overflow-hidden animate-in delay-3 border-b border-border">
         {['Recipes', 'Prep plan', 'Shopping list'].map((tab, i) => (
           <button
             key={tab}
             type="button"
-            className={`flex-1 py-3 text-body font-semibold text-center transition-colors
-              ${i === 0 ? 'text-dark border-b-2 border-dark -mb-[2px]' : 'text-grey'}`}
+            className={`flex-1 py-3.5 text-body font-semibold text-center
+              ${i === 0 ? 'text-dark border-b-2 border-dark -mb-px' : 'text-grey'}`}
           >
             {tab}
           </button>
         ))}
       </div>
 
-      {/* Recipe list — single white card, thick black dividers only between rows */}
-      <div className="bg-bright rounded-b-2xl w-full overflow-hidden -mt-0">
+      {/* Recipe list — single white card, thin grey dividers like a real app */}
+      <div className="bg-bright rounded-b-2xl w-full overflow-hidden">
         {recipes.map((recipe, i) => {
           const servings = recipe.servings ?? ctx.totalPeople ?? 4
           return (
             <div
               key={i}
-              className={`flex items-center gap-3 p-3 ${i > 0 ? 'border-t-2 border-dark' : ''}`}
+              className={`flex items-start gap-4 p-4 ${i > 0 ? 'border-t border-border' : ''}`}
             >
               {recipe.image ? (
-                <img src={assetUrl(recipe.image)} alt="" className="w-20 h-20 shrink-0 rounded-xl object-cover" />
+                <img src={assetUrl(recipe.image)} alt="" className="w-[110px] h-[110px] shrink-0 rounded-xl object-cover" />
               ) : (
-                <div className="w-20 h-20 shrink-0 rounded-xl bg-border/30 flex items-center justify-center">
+                <div className="w-[110px] h-[110px] shrink-0 rounded-xl bg-border/30 flex items-center justify-center">
                   <span className="text-micro text-grey">photo</span>
                 </div>
               )}
-              <div className="flex flex-col gap-2 flex-1 min-w-0">
-                <span className="text-body font-bold text-dark leading-tight line-clamp-2">
+              <div className="flex flex-col gap-2 flex-1 min-w-0 pt-1">
+                <span className="text-cta font-bold text-dark leading-tight line-clamp-2">
                   {interpolate(recipe.name, ctx)}
                 </span>
-                <div className="flex items-center gap-1.5 text-dark">
-                  <Clock size={14} strokeWidth={2.2} />
-                  <span className="text-small font-medium">{interpolate(recipe.time, ctx)}</span>
+                <div className="flex items-center gap-1.5 text-grey">
+                  <Clock size={16} strokeWidth={2} />
+                  <span className="text-body">{interpolate(recipe.time, ctx)}</span>
                 </div>
-                <div className="flex items-center justify-between mt-0.5">
-                  <div className="inline-flex items-center gap-1 bg-bright rounded-full border-2 border-dark pl-1 pr-1 py-0.5">
-                    <button type="button" className="w-6 h-6 rounded-full flex items-center justify-center text-dark" aria-label="decrease">
-                      <Minus size={14} strokeWidth={2.5} />
+                <div className="flex items-center justify-between mt-1">
+                  <div className="inline-flex items-center gap-0 bg-bright rounded-full border-2 border-dark">
+                    <button type="button" className="w-8 h-8 rounded-full flex items-center justify-center text-dark" aria-label="decrease">
+                      <Minus size={18} strokeWidth={2.5} />
                     </button>
-                    <span className="text-small font-bold text-dark tabular-nums w-4 text-center">{servings}</span>
-                    <button type="button" className="w-6 h-6 rounded-full flex items-center justify-center text-dark" aria-label="increase">
-                      <Plus size={14} strokeWidth={2.5} />
+                    <span className="text-body font-bold text-dark tabular-nums w-5 text-center">{servings}</span>
+                    <button type="button" className="w-8 h-8 rounded-full flex items-center justify-center text-dark" aria-label="increase">
+                      <Plus size={18} strokeWidth={2.5} />
                     </button>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <button type="button" className="w-7 h-7 flex items-center justify-center text-dark" aria-label="view">
-                      <Eye size={18} strokeWidth={2} />
+                  <div className="flex items-center gap-2">
+                    <button type="button" className="w-8 h-8 flex items-center justify-center text-dark" aria-label="view">
+                      <Eye size={22} strokeWidth={2} />
                     </button>
-                    <button type="button" className="w-7 h-7 flex items-center justify-center text-dark" aria-label="more">
-                      <MoreHorizontal size={18} strokeWidth={2} />
+                    <button type="button" className="w-8 h-8 flex items-center justify-center text-dark" aria-label="more">
+                      <MoreHorizontal size={22} strokeWidth={2.5} />
                     </button>
                   </div>
                 </div>
