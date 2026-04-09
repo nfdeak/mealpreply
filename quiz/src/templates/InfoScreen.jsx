@@ -159,8 +159,22 @@ function ValueDemoVariant({ screen, ctx }) {
         </div>
       )}
 
+      {/* Tab bar — visual only, shows the 3 sections of the app */}
+      <div className="flex w-full bg-bright rounded-t-2xl overflow-hidden animate-in delay-3 border-b-2 border-dark">
+        {['Recipes', 'Prep plan', 'Shopping list'].map((tab, i) => (
+          <button
+            key={tab}
+            type="button"
+            className={`flex-1 py-3 text-body font-semibold text-center transition-colors
+              ${i === 0 ? 'text-dark border-b-2 border-dark -mb-[2px]' : 'text-grey'}`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
       {/* Recipe list — single white card, thick black dividers only between rows */}
-      <div className="bg-bright rounded-2xl w-full overflow-hidden animate-in delay-3">
+      <div className="bg-bright rounded-b-2xl w-full overflow-hidden -mt-0">
         {recipes.map((recipe, i) => {
           const servings = recipe.servings ?? ctx.totalPeople ?? 4
           return (
