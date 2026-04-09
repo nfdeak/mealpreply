@@ -228,11 +228,13 @@ export default function InfoScreen({ screen, ctx = {}, onNext, onBack }) {
   // Insight has image bg but dark back arrow per design
   const arrowColor = variant === 'insight' ? 'text-dark' : isDark ? 'text-bright' : 'text-dark'
 
-  const ctaFooterBg = isDark
-    ? 'bg-violett'
-    : isImageBg
-      ? ''
-      : 'bg-gradient-to-t from-[#FBFBFB] via-[#FBFBFB] to-transparent'
+  const ctaFooterBg = variant === 'value_demo'
+    ? ''
+    : isDark
+      ? 'bg-violett'
+      : isImageBg
+        ? ''
+        : 'bg-gradient-to-t from-[#FBFBFB] via-[#FBFBFB] to-transparent'
 
   return (
     <div
