@@ -1154,8 +1154,8 @@
       ],
       "plans": [
         {"id": "weekly", "label": "1-WEEK PLAN", "oldPrice": "11.99", "price": "9.99", "perDay": "1.43"},
-        {"id": "monthly", "label": "1-MONTH PLAN", "oldPrice": "34.99", "price": "29.99", "perDay": "1.00"},
-        {"id": "quarterly", "label": "3-MONTH PLAN", "oldPrice": "94.99", "price": "79.99", "perDay": "0.89", "popular": true}
+        {"id": "monthly", "label": "1-MONTH PLAN", "oldPrice": "34.99", "price": "29.99", "perDay": "1.00", "popular": true},
+        {"id": "quarterly", "label": "3-MONTH PLAN", "oldPrice": "94.99", "price": "79.99", "perDay": "0.89"}
       ],
       "guarantee": {
         "title": "30-day Money Back Guarantee",
