@@ -429,7 +429,10 @@ export default function CaptureScreen({ screen, answer, ctx = {}, onSelect, onNe
             <PaywallVariant
               screen={screen}
               ctx={ctx}
-              onBuy={() => setShowPopup(true)}
+              onBuy={() => {
+                onNext()
+                setShowPopup(true)
+              }}
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
             />
