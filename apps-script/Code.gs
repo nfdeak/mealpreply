@@ -17,7 +17,8 @@ const EVENTS_HEADERS = [
   'payloadJson',
   'clientTs',
   'path',
-  'userAgent'
+  'userAgent',
+  'utmSource'
 ];
 
 const USERS_BASE_HEADERS = [
@@ -31,7 +32,8 @@ const USERS_BASE_HEADERS = [
   'firstScreenAt',
   'maxScreenPos',
   'lastScreenId',
-  'lastEvent'
+  'lastEvent',
+  'utmSource'
 ];
 
 function doGet() {
@@ -109,7 +111,8 @@ function appendRawEvent_(payload, eventName, now) {
     toJsonString_(payload),
     safeString_(payload.clientTs),
     safeString_(payload.path),
-    safeString_(payload.userAgent)
+    safeString_(payload.userAgent),
+    getUtmSourceFromPayload_(payload)
   ];
 
   sheet.appendRow(row);
@@ -151,6 +154,11 @@ function upsertUserRow_(payload, eventName, now) {
     const email = safeString_(payload.email);
     if (email) {
       setCellByHeader_(rowValues, header, 'email', email);
+    }
+
+    const utmSource = getUtmSourceFromPayload_(payload);
+    if (utmSource && !getCellByHeader_(rowValues, header, 'utmSource')) {
+      setCellByHeader_(rowValues, header, 'utmSource', utmSource);
     }
 
     const screenId = safeString_(payload.screenId);
@@ -469,6 +477,11 @@ function toJsonString_(value) {
 function toNumberOrEmpty_(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : '';
+}
+
+function getUtmSourceFromPayload_(payload) {
+  if (!payload || typeof payload !== 'object') return '';
+  return safeString_(payload.utmSource || payload.utm_source);
 }
 
 function safeString_(value) {

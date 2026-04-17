@@ -1,6 +1,7 @@
 const DEFAULT_WEB_APP_URL = '';
 
 const SESSION_ID_STORAGE_KEY = 'mpq_session_id';
+const UTM_SOURCE_STORAGE_KEY = 'mpq_utm_source';
 const SENT_ONCE_SESSION_STORAGE_PREFIX = 'mpq_telemetry_sent:';
 
 const getWebAppUrl = () =>
@@ -21,6 +22,45 @@ const generateId = () => {
     // ignore
   }
   return `sid_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
+};
+
+const normalizeUtmSource = (value) => String(value || '').trim();
+
+export const readUtmSourceFromLocation = () => {
+  try {
+    const search = globalThis.location?.search || '';
+    if (!search || !globalThis.URLSearchParams) return '';
+    return normalizeUtmSource(new URLSearchParams(search).get('utm_source'));
+  } catch {
+    return '';
+  }
+};
+
+const getStoredUtmSource = () => {
+  try {
+    return normalizeUtmSource(localStorage.getItem(UTM_SOURCE_STORAGE_KEY));
+  } catch {
+    return '';
+  }
+};
+
+const storeUtmSource = (value) => {
+  const normalized = normalizeUtmSource(value);
+  if (!normalized) return;
+  try {
+    localStorage.setItem(UTM_SOURCE_STORAGE_KEY, normalized);
+  } catch {
+    // ignore
+  }
+};
+
+export const resolveUtmSource = () => {
+  const fromLocation = readUtmSourceFromLocation();
+  if (fromLocation) {
+    storeUtmSource(fromLocation);
+    return fromLocation;
+  }
+  return getStoredUtmSource();
 };
 
 export const getOrCreateSessionId = () => {
@@ -61,7 +101,8 @@ export const trackEvent = (event, payload = {}) => {
     ...payload,
     clientTs: payload.clientTs || safeNowIso(),
     path: payload.path || globalThis.location?.pathname || '',
-    userAgent: payload.userAgent || globalThis.navigator?.userAgent || ''
+    userAgent: payload.userAgent || globalThis.navigator?.userAgent || '',
+    utmSource: normalizeUtmSource(payload.utmSource || payload.utm_source) || resolveUtmSource()
   });
 
   try {
